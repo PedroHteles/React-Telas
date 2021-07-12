@@ -1,0 +1,37 @@
+Modelo de dados para o cadastro.
+
+Vou explicar pessoalmente, tentei escrever mais é muita coisa.
+
+
+CREATE TABLE modelo_veiculos
+    (
+    id_modelo                       int NOT NULL AUTO_INCREMENT,
+    descricao                      VARCHAR (40) NOT NULL,
+    PRIMARY KEY (id_modelo)
+    )
+insert into modelo_veiculos (descricao) values ('IVECO DAILY-35.10')
+
+
+CREATE TABLE cdas
+    (
+    id_cda                         int NOT NULL AUTO_INCREMENT,
+    descricao                     CHAR (20) NOT NULL,
+    PRIMARY KEY (id_cda)
+    )
+
+insert into cdas (descricao) values ('BRASILIA - DF')
+
+
+
+CREATE TABLE cda_padrao_abastecimentos
+    (
+    id_cda_padrao_abastec     int NOT NULL AUTO_INCREMENT,
+    id_cda                       TINYINT NOT NULL,
+    id_modelo_veiculo            SMALLINT NOT NULL,
+    qtd_litros_abastec_padrao SMALLINT NOT NULL,
+    media_padrao              DECIMAL (4,2) NOT NULL,
+    PRIMARY KEY (id_cda_padrao_abastec)
+    )
+insert into cda_padrao_abastecimentos(id_cda, id_modelo_veiculo,qtd_litros_abastec_padrao,media_padrao) values (1,1,120,4.5)
+
+--
