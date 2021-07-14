@@ -1,31 +1,36 @@
-
+from rotas import app, mysql
 from flask import Flask, jsonify, redirect, request , url_for, session
-import json
-import sqlite3
+from flask_mysqldb import  MySQLdb
+import simplejson as json
 from flask_cors import CORS
 
-
-
-app = Flask(__name__)
 CORS(app)
 
-banco = sqlite3.connect('tabela.db')
-cursor = banco.cursor()
-cdas = cursor.execute("SELECT * FROM  cdas ").fetchall()
-dbsalarioinss2 = cursor.execute("SELECT * FROM  modelo_veiculos").fetchall()
-media_padrao = cursor.execute("SELECT * FROM  cda_padrao_abastecimentos").fetchall()
-print (cdas)
+@app.route('/cda_padrao_abastecimentos', methods=['GET'])
+def banco():
 
-@app.route('/teste')
-def index():
+    curl1 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    curl1.execute("SELECT cda_padrao_abastecimentos.id_cda, cda_padrao_abastecimentos.id_modelo_veiculo,modelo_veiculos.descricao, cdas.descricao,cda_padrao_abastecimentos.qtd_litros_abastec_padrao,cda_padrao_abastecimentos.media_padrao FROM cda_padrao_abastecimentos inner join cdas on cdas.id_cda =  cda_padrao_abastecimentos.id_cda  inner join modelo_veiculos on cda_padrao_abastecimentos.id_modelo_veiculo  =  modelo_veiculos.id_modelo ;")
+    rows1 = curl1.fetchall()
+    curl1.close()
+    print(rows1)
+    return json.dumps(rows1)
 
-    print(cdas,dbsalarioinss2)
-    return jsonify ({
+@app.route('/cdas', methods=['GET'])
+def banco1():
+    curl = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    curl.execute("SELECT * FROM  cdas")
+    rows = curl.fetchall()
+    curl.close()
+    return json.dumps(rows)
 
-    }
-
-    )
-
+@app.route('/modelo_veiculos', methods=['GET'])
+def banco2():
+    curl = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    curl.execute("SELECT * FROM  modelo_veiculos")
+    rows = curl.fetchall()
+    curl.close()
+    return json.dumps(rows)
 
 
 
