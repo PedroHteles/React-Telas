@@ -1,8 +1,8 @@
 import './App.css';
 import React, { Component } from "react";
 import Page from './Components/Pages/Page';
-
 class App extends Component {
+
 
 
   render() {
@@ -12,5 +12,7 @@ class App extends Component {
       </section>
     );
   }
+
 }
+
 export default App;
