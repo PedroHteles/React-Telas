@@ -1,12 +1,8 @@
 import React,{useState, useEffect} from  'react';
 import 'reactjs-popup/dist/index.css';
 import api from '../services/api';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import {withStyles} from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import Popup from '../Pages/teste';
@@ -15,12 +11,13 @@ import Popup from '../Pages/teste';
 function Page() {
 
   //array
+  //array
   const [CDAS, setCDAS] = useState([]);
   const [Veiculo, setVeiculo] = useState([]);
   const [Filter, setFilter] = useState([]);
   const [PesquisaVeiculo, setPesquisaVeiculo] = useState([]);
-  const [set_formnewlitros,  set_FormNewLitros] = useState([]);
-  const [set_fornewmedia, set_FormNewMedia] = useState([]);
+  const [formnewlitros,  setFormNewLitros] = useState([]);
+  const [fornewmedia, setFormNewMedia] = useState([]);
 
   //popups
   const [ButtonPopupNOVO, setButtonPopupNOVO] = useState(false);
@@ -28,24 +25,23 @@ function Page() {
   const [ButtonPopupDeletar, setButtonPopupDeletar] = useState(false);
 
   //array mapeadas
-  const [st_cda, setCDA] = useState([]);
-  const [st_veiculo, setVEICULO] = useState([]);  
+  const [cda, setCDA] = useState([]);
+  const [veiculo, setVEICULO] = useState([]);  
   const [ID_CDA, setID_CDA] = useState([]);
   const [ID_CDAPadrao, setID_CDAPadrao] = useState([]);
   const [id_modelo_veiculo, setid_modelo_veiculo] = useState([]);
-  const [Litosabastec, setLitros] = useState([]);
-  const [MediaPadrao, setMediaPadrao] = useState([]);
 
 
   //formularios
-  const [set_formlitros,  set_FormLitros] = useState([]);
-  const [set_formedia, set_FormMedia] = useState([]);
+  const [formlitros,  setFormLitros] = useState([]);
+  const [formedia, setFormMedia] = useState([]);
 
   //Select
   const [NewNewCda, SetNewCda] = React.useState("1");
   const [Formveiculo, SetFormveiculo] = React.useState("0");
   const [indexCDAS, setindexCDAS] = React.useState("0");
   const [indexVEICULOS, setindexVEICULOS] = React.useState("0");
+
 
  //useEffect
   useEffect( () =>{
@@ -148,7 +144,7 @@ function Page() {
   async function handleChangeDeletar(event){
     if (ID_CDAPadrao != null){
           const Apagarformulario = { id_CdaPadrao:ID_CDAPadrao}
-          const  res = await api.post('deletar',Apagarformulario)
+          await api.post('deletar',Apagarformulario)
           window.location.reload();
     }
 
@@ -156,16 +152,16 @@ function Page() {
 
   async function EnviaFormularioEditar(event){
     event.preventDefault()
-    const editarformulario = { id_CdaPadrao:ID_CDAPadrao, id_cda:ID_CDA, id_modelo:id_modelo_veiculo, media:set_formedia , litros:set_formlitros}
-    const  res = await api.post('editar',editarformulario)
+    const editarformulario = { id_CdaPadrao:ID_CDAPadrao, id_cda:ID_CDA, id_modelo:id_modelo_veiculo, media:formedia , litros:formlitros}
+    await api.post('editar',editarformulario)
     window.location.reload();
     
 
   }
   async function handleSubmitFormularioNovo (e){
 
-    const novoformulario = { id_cda:NewNewCda, id_modelo:Formveiculo, media:set_fornewmedia , litros:set_formnewlitros}
-    const  res = await api.post('inserir',novoformulario)
+    const novoformulario = { id_cda:NewNewCda, id_modelo:Formveiculo, media:fornewmedia , litros:formnewlitros}
+    await api.post('inserir',novoformulario)
 
 
   } 
@@ -175,17 +171,17 @@ function Page() {
     setButtonPopupDeletar(false)
   }
   const handleChangeMedia = (e) => {
-    set_FormMedia(e.target.value);
+    setFormMedia(e.target.value);
   }
   const handleChangeLitros = (e) => {
-    set_FormLitros(e.target.value);
+    setFormLitros(e.target.value);
   }
   const handleChangeNewMedia = (e) => {
-    set_FormNewMedia(e.target.value);
+    setFormNewMedia(e.target.value);
 
   }
   const handleChangeNewLitros = (e) => {
-    set_FormNewLitros(e.target.value);
+    setFormNewLitros(e.target.value);
 
   }
 
@@ -245,8 +241,6 @@ function Page() {
                   setID_CDAPadrao(posts.id_cda_padrao_abastec)
                   setCDA(posts.cda_descricao);
                   setVEICULO(posts.veiculo_descricao);
-                  setLitros(posts.qtd_litros_abastec_padrao)
-                  setMediaPadrao(posts.media_padrao)
                 }
                 }>X</button>  </td>
               </tr>
@@ -284,8 +278,8 @@ function Page() {
     </Popup>
 
     <Popup trigger={buttonPopup} setTriger={setButtonPopup} >
-      <h1 className="text-center">{st_cda}</h1>
-      <h1 className="text-center">{st_veiculo}</h1>
+      <h1 className="text-center">{cda}</h1>
+      <h1 className="text-center">{veiculo}</h1>
         <form className="form-center"  onSubmit={EnviaFormularioEditar}>
           <h3 className="text-center">Qtd. de Litros</h3>
           <input type="number" min="1" className="input" onChange={handleChangeLitros} ></input>
@@ -297,8 +291,8 @@ function Page() {
 
     <Popup trigger={ButtonPopupDeletar} setTriger={setButtonPopupDeletar} >
       <h2 className="text-center">deseja realmente deletar?</h2>
-      <h1 className="text-center">{st_cda}</h1>
-      <h1 className="text-center">{st_veiculo}</h1>
+      <h1 className="text-center">{cda}</h1>
+      <h1 className="text-center">{veiculo}</h1>
     <div className="simenao">        
       <button className="enviar4 " onClick={
         handleChangeDeletar
