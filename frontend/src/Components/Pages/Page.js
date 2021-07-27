@@ -67,6 +67,13 @@ function Page() {
       const  res = await api.post('filter',dados)
       setFilter(res.data)
     }
+    getfilter()
+  }, [indexCDAS,indexVEICULOS])
+
+
+
+  useEffect( () =>{
+
 
     async function Newform(){
       const dados = {value:NewNewCda}
@@ -75,8 +82,7 @@ function Page() {
     }
 
     Newform()
-    getfilter()
-  }, [indexCDAS,indexVEICULOS])
+  }, [NewNewCda])
 
 
 
@@ -189,61 +195,64 @@ function Page() {
     <div className="div1">
     <header><img src="https://media-exp1.licdn.com/dms/image/C510BAQHml9VWZyqWlw/company-logo_200_200/0/1519864734798?e=2159024400&v=beta&t=UVBa29_a_iO3R70BDj7pu07dBydfs8pPsEG5urcmjE4" width="50" height="50" className="logo" alt="website logo"/></header>
   <table className="tabela1">
+    
     <thead>
-      <th>    
-        <FormControl >
-    <NativeSelect id="demo-customized-select-native" value={indexCDAS} onChange={handleChangeCDA} input={<BootstrapInput />}>
-      <option value="0">CDAS</option>
-        {CDAS.map((posts) => (     
-            <option value={posts.value}>{posts.label}</option>
-      ))}
+      <tr>
+        <th >    
+          <FormControl >
+            <NativeSelect id="demo-customized-select-native" value={indexCDAS} onChange={handleChangeCDA} input={<BootstrapInput />}>
+              <option value="0">CDAS</option>
+                {CDAS.map((posts) => (     
+                    <option value={posts.value}>{posts.label}</option>
+              ))}
 
-    </NativeSelect>
-  </FormControl></th>
-      <th>
-    <FormControl >
-      <NativeSelect id="demo-customized-select-native" value={indexVEICULOS} onChange={handleChangeVeiculo} input={<BootstrapInput />}>
-        <option value="0">VEICULOS</option>
-          {Veiculo.map((posts) => (     
-              <option value={posts.id_modelo}>{posts.descricao}</option>
-        ))}
+            </NativeSelect>
+          </FormControl></th>
+        <th>
+          <FormControl >
+            <NativeSelect id="demo-customized-select-native" value={indexVEICULOS} onChange={handleChangeVeiculo} input={<BootstrapInput />}>
+              <option value="0">VEICULOS</option>
+                {Veiculo.map((posts) => (     
+                    <option value={posts.id_modelo}>{posts.descricao}</option>
+              ))}
 
-      </NativeSelect>
-    </FormControl>
-      </th>
-      <th>Qtd. de Litros</th>
-      <th>Média Padrão</th>
-      <th>Editar</th>
-      <th className="deletartab">Deletar</th>
+            </NativeSelect>
+          </FormControl>
+        </th>
+        <th>Qtd. de Litros</th>
+        <th>Média Padrão</th>
+        <th>Editar</th>
+        <th className="deletartab">Deletar</th>
+      </tr>
     </thead>
       {
-      (Filter === Filter) && 
-        <tbody>
-          {Filter.map((posts) => (     
-              <tr>
-                <td>{posts.cda_descricao}</td>
-                <td>{posts.veiculo_descricao}</td>
-                <td>{posts.qtd_litros_abastec_padrao}</td>
-                <td>{posts.media_padrao}</td>
-                <td>  <button className="editar" onClick={() =>{
-                  setButtonPopup(true);
-                  setCDA(posts.cda_descricao);
-                  setVEICULO(posts.veiculo_descricao);
-                  setID_CDA(posts.id_cda);
-                  setid_modelo_veiculo(posts.id_modelo_veiculo)
-                  setID_CDAPadrao(posts.id_cda_padrao_abastec)
-                }
-                }>✎</button>
-                </td>
-                <td className="X">
-                <button className="x2" onClick={() =>{
-                  setButtonPopupDeletar(true);
-                  setID_CDAPadrao(posts.id_cda_padrao_abastec)
-                  setCDA(posts.cda_descricao);
-                  setVEICULO(posts.veiculo_descricao);
-                }
-                }>X</button>  </td>
-              </tr>
+        (Filter) && 
+          <tbody>
+            {Filter.map((posts, i) => (     
+                <tr key={i}>
+                  <td>{posts.cda_descricao}</td>
+                  <td>{posts.veiculo_descricao}</td>
+                  <td>{posts.qtd_litros_abastec_padrao}</td>
+                  <td>{posts.media_padrao}</td>
+                  <td>  <button className="editar" onClick={() =>{
+                    setButtonPopup(true);
+                    setCDA(posts.cda_descricao);
+                    setVEICULO(posts.veiculo_descricao);
+                    setID_CDA(posts.id_cda);
+                    setid_modelo_veiculo(posts.id_modelo_veiculo)
+                    setID_CDAPadrao(posts.id_cda_padrao_abastec)
+                  }
+                  }>✎</button>
+                  </td>
+                  <td className="X">
+                  <button className="x2" onClick={() =>{
+                    setButtonPopupDeletar(true);
+                    setID_CDAPadrao(posts.id_cda_padrao_abastec)
+                    setCDA(posts.cda_descricao);
+                    setVEICULO(posts.veiculo_descricao);
+                  }
+                  }>X</button>  </td>
+                </tr>
           ))}
         </tbody>
       }
