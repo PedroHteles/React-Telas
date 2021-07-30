@@ -79,7 +79,7 @@ const TableBase = () => {
   useEffect(() => {
     // setData(dataTable);
     setContent(data);
-  }, []);
+  }, [data]);
 
   const onRowSelect = (row) => {
     console.log(row);
