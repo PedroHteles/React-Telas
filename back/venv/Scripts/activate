@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\pedro.teles\Documents\TelaLogistica\api\venv"
+VIRTUAL_ENV="C:\Users\Pedro\Documents\trabalho\TabelaLogistica-main\api\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

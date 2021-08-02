@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\pedro.teles\Documents\TelaLogistica\api\venv
+set VIRTUAL_ENV=C:\Users\Pedro\Documents\trabalho\TabelaLogistica-main\api\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

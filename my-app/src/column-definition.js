@@ -1,37 +1,23 @@
+
 export default [
   {
-    dataKey: "id_cda",
-    title: "Código",
-    width: 100,
-    sortable: true,
-    align: "center"
-  },
-  {
-    dataKey: "descricao",
+    dataKey: "cda_descricao",
     title: "Nome",
     width: 110
   },
   {
-    dataKey: "type",
+    dataKey: "veiculo_descricao",
     title: "Tipo",
     width: 150
   },
   {
-    dataKey: "hp",
-    title: "HP",
-    width: 60,
-    sortable: true
+    dataKey: "qtd_litros_abastec_padrao",
+    title: "Tipo",
+    width: 150
   },
   {
-    dataKey: "attack",
-    title: "Ataque",
-    width: 100,
-    sortable: true
-  },
-  {
-    dataKey: "defense",
-    title: "Defesa",
-    width: 100,
-    sortable: true
+    dataKey: "media_padrao",
+    title: "Tipo",
+    width: 150
   }
 ];

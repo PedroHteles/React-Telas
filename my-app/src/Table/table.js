@@ -34,21 +34,12 @@ const Table = ({
       setSelectedRowKeys(selectedRowKeys);
     }
 
-    onRowSelect({ rowData, rowIndex });
+    onRowSelect( rowData );
     onSelectedRowsChange(selectedRowKeys);
   };
 
-  /** aplica o efeito de seleção nas linhas */
-  const selectedRowCurrent = ({ rowData, rowIndex }) => {
-    console.log(rowClassName);
-    const rowClass = rowClassName
-      ? callOrReturn(rowClassName, { rowData, rowIndex })
-      : "";
-    const key = rowData[rowKey];
-    return [rowClass, selectedRowKeys.includes(key) && "row-selected"]
-      .filter(Boolean)
-      .concat(" ");
-  };
+
+
 
   let _columns = columns || normalizeColumns(children);
 
@@ -78,8 +69,8 @@ const Table = ({
             height={height}
             headerHeight={headerHeight}
             rowHeight={rowHeight}
-            rowClassName={selectedRowCurrent}
             rowKey={rowKey}
+            key="1"
             onColumnSort={onColumnSort}
             emptyRenderer={<Empty>Sem informações no momento</Empty>}
             columns={_columns}
@@ -91,11 +82,6 @@ const Table = ({
           </BaseTable>
         )}
       </AutoResizer>
-      <footer>
-        {selectedRowKeys.length
-          ? `${selectedRowKeys.length} pokemons selecionados`
-          : ""}
-      </footer>
     </Content>
   );
 };
