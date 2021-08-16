@@ -10,7 +10,7 @@ import "react-base-table/styles.css";
 
 import { Content, Empty } from "./styles";
 
-import SelectionCell from "../SelectionCell";
+import SelectionCell from "./SelectionCell";
 
 const Table = ({
   data,

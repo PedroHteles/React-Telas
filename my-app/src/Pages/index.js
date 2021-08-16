@@ -6,9 +6,10 @@ import { IndexContext } from '../components/context/indexContext'
 import Filtros from '../components/Select/select'
 import { Table, Column } from "../components/Componentes/Table";
 import columnDefinition from "../components/Componentes/Table/column-definition";
+
+
 const TableBase = () => {
   const {filter,  CDAS , Veiculo } = React.useContext(IndexContext);
-  
   //front
   const [Post, setPost] = useState([]);
   const [formlitros,  setFormLitros] = useState([]);
@@ -37,7 +38,6 @@ const TableBase = () => {
   return (
     <>
       <Filtros cda={CDAS} veiculo={Veiculo}/>
-
       <Table
         data={filter}
         rowKey="id"

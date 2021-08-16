@@ -7,17 +7,17 @@ export default [
   },
   {
     dataKey: "veiculo_descricao",
-    title: "Tipo",
+    title: "veiculo",
     width: 150
   },
   {
     dataKey: "qtd_litros_abastec_padrao",
-    title: "teste",
+    title: "litros",
     width: 150
   },
   {
     dataKey: "media_padrao",
-    title: "asad",
+    title: "media",
     width: 150
   }
 ];
