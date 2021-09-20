@@ -18,7 +18,6 @@ export default function IndexProvider({ children }) {
   const [formlitros,  setFormlitros] = useState(0);
   const [formedia, setFormMedia] = useState(0);
   const [status, setStatus] = useState(null);
-  const [statuscode, setStatuscode] = useState();
   const [buttonPopup, setButtonpopup] = useState(false);
 
     React.useEffect(() => {
@@ -73,7 +72,7 @@ export default function IndexProvider({ children }) {
 
   return (
     <IndexContext.Provider
-      value={{ cdas, veiculos,filter,medias,indexveiculos,indexCDAS,cda0,Post,formlitros,formedia,status,statuscode,buttonPopup,
+      value={{ cdas, veiculos,filter,medias,indexveiculos,indexCDAS,cda0,Post,formlitros,formedia,status,buttonPopup,
         setCdas, setVeiculos,setFilter,setMedias,setIndexveiculos,setIndexcdas,setIndexcda0,enviaFormularioEditar,setPost,setFormlitros,setFormMedia,setStatus,setButtonpopup }}
     >{children}
     </IndexContext.Provider>

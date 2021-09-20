@@ -108,12 +108,12 @@ const TableBase = () => {
           </div>
         </form>
         {status === 1 ? <div className="alterado">
-        <div className="corzinha2">⠀</div>
+        <div className="erro">⠀</div>
         <h3 className="marginText">Erro!</h3>
       </div> : <></>}
       </Popup>
       {status === true ? <div className="alterado">
-        <div className="corzinha">⠀</div>
+        <div className="certo">⠀</div>
         <h3 className="marginText">Valor alterado!</h3>
       </div> : <></>}
 
