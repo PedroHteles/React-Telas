@@ -1,10 +1,10 @@
 import React from "react";
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { IndexContext } from '../context/indexContext'
+import { IndexContext } from '../../context/index'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Cssselect } from "../../components/Componentes/Table/styles";
+import { Cssselect } from "../../components/Table/styles";
 
 
 function Filtros() {

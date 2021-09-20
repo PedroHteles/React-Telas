@@ -1,6 +1,6 @@
 import React from 'react';
-import IndexProvider from "./components/context/indexContext";
-import TableBase from './Pages/index'
+import IndexProvider from "./context/index";
+import TableBase from './components/Pages/index'
 import './App.css';
 function App() {
 

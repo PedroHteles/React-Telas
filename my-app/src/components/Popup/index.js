@@ -1,5 +1,5 @@
 import React from 'react'
-import { IndexContext } from '../../context/indexContext'
+import { IndexContext } from '../../context/index'
 
 function Popup(props){
     const { setStatus } = React.useContext(IndexContext);

@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import 'reactjs-popup/dist/index.css';
-import Popup from '../components/Componentes/Popup/popup';
-import { IndexContext } from '../components/context/indexContext'
-import Filtros from '../components/Select/select'
-import { Table, Column } from "../components/Componentes/Table";
-import columnDefinition from "../components/Componentes/Table/column-definition";
+import Popup from '../Popup/index';
+import { IndexContext } from '../../context/index'
+import Filtros from '../Select/index'
+import { Table, Column } from "../Table";
+import columnDefinition from "../Table/column-definition";
 import FilledInput from '@mui/material/FilledInput';
 import Button from '@mui/material/Button';
 

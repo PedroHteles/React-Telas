@@ -1,12 +1,14 @@
   
 import React, { createContext, useState} from "react";
-import api from "../../services/api";
+import api from "../services/api";
 
 export const IndexContext = createContext();
 
 export default function IndexProvider({ children }) {
   const [cdas, setCdas] = useState([]);
+
   const [veiculos, setVeiculos] = useState([]);
+  
   const [filter, setFilter] = useState([]);
   const [medias, setMedias] = useState([]);
   const [indexveiculos, setIndexveiculos] = React.useState(0);
