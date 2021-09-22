@@ -33,34 +33,30 @@ def modelos():
 @app.route('/pesquisa', methods=['POST'])
 def pesquisa():
     request_data = json.loads(request.data)
-    id_cda = request_data['indexcda']
-    veiculos = request_data['indexveiculos']
-    id_cda0 = request_data['cda0']
+    id_cda = request_data['idCdaSelec']
+    veiculos = request_data['idVeiculoSelec']
+    id_cda0 = request_data['abastecimentoZerado']
     conn = engine.connect()
     return json.dumps(pesquisa_banco(id_cda,veiculos,id_cda0,conn)),200
 
 @app.route('/editar', methods=['POST'])
 def editar():
     request_data = json.loads(request.data)
-    media = request_data['media']
-    litros = request_data['litros']
-    id_cda = request_data['id_cda']
-    id_modelo = request_data['id_modelo']
-    cdapadrao = request_data['id_CdaPadrao']
-    id_cda = request_data['indexcda']
-    veiculos = request_data['indexveiculos']
-    id_cda0 = request_data['cda0']
+    media = request_data['mediaAbastecimento']
+    litros = request_data['qtdLitros']
+    id_cda_padrao = request_data['idCdaAbastecimento']
+    print(request_data)
     conn = engine.connect()
+    print(type(media) == float or type(media) == int)
 
-    if (type(media) == float or type(media) == int) and type(litros) == int and type(id_cda) == int and type(id_modelo) == int and type(cdapadrao) == int and type(id_cda) == int and type(veiculos) == int and type(id_cda0) == int:
-        s = select(cda_padrao_abastecimentos).where(cda_padrao_abastecimentos.c.id_cda_padrao_abastec == cdapadrao)
+    if (type(media) == float or type(media) == int) and type(litros) == int and type(id_cda_padrao) == int:
+        s = select(cda_padrao_abastecimentos).where(cda_padrao_abastecimentos.c.id_cda_padrao_abastec == id_cda_padrao)
         result = conn.execute(s)
         if media < 100 and result.one() != []:
             try:
-                tmt = cda_padrao_abastecimentos.update().where(cda_padrao_abastecimentos.c.id_cda_padrao_abastec == cdapadrao).values(qtd_litros_abastec_padrao=litros,media_padrao=media)
+                tmt = cda_padrao_abastecimentos.update().where(cda_padrao_abastecimentos.c.id_cda_padrao_abastec == id_cda_padrao).values(qtd_litros_abastec_padrao=litros,media_padrao=media)
                 conn.execute(tmt)
-                results = conn.execute(f'''SELECT cpa1.id_cda_padrao_abastec, cpa1.id_cda, cpa1.id_modelo_veiculo,modelo_veiculos.descricao veiculo_descricao , cdas.descricao cda_descricao,cpa1.qtd_litros_abastec_padrao,cpa1.media_padrao FROM cda_padrao_abastecimentos cpa1 inner join cdas on cdas.id_cda =  cpa1.id_cda inner join modelo_veiculos on cpa1.id_modelo_veiculo  =  modelo_veiculos.id_modelo where cpa1.id_cda_padrao_abastec = {cdapadrao}''').one()
-                return json.dumps({'alterado': pesquisa_banco(id_cda,veiculos,id_cda0,conn),'valor_alterado':results}),201
+                return  jsonify({'status': 'Alterado'}),201
             except:
                 return jsonify({'status': 'erro ao inserir objeto'}),400
         else:
@@ -72,17 +68,13 @@ def editar():
 @app.route('/criar', methods=['POST'])
 def criar():
     request_data = json.loads(request.data)
-    media = request_data['media']
-    litros = request_data['litros']
-    id_cda = request_data['id_cda']
-    id_modelo = request_data['id_modelo']
-    cdapadrao = request_data['id_CdaPadrao']
-    id_cdaPesquisa = request_data['indexcda']
-    veiculos = request_data['indexveiculos']
-    id_cda0 = request_data['cda0']
+    media = request_data['mediaAbastecimento']
+    litros = request_data['qtdLitros']
+    id_cda = request_data['idCda']
+    id_modelo = request_data['idModelo']
     conn = engine.connect()
 
-    if (type(media) == float or type(media) == int) and type(litros) == int and type(id_cda) == int and type(id_modelo) == int and cdapadrao == None and type(id_cda) == int and type(veiculos) == int and type(id_cda0) == int:
+    if (type(media) == float or type(media) == int) and type(litros) == int:
         s = select(cda_padrao_abastecimentos.c.id_cda, cda_padrao_abastecimentos.c.id_modelo_veiculo).where(cda_padrao_abastecimentos.c.id_cda == id_cda,cda_padrao_abastecimentos.c.id_modelo_veiculo == id_modelo)
         result = conn.execute(s)
         if result.all() == []:
@@ -93,7 +85,7 @@ def criar():
                 result = conn.execute(s)
                 results = conn.execute(f'''SELECT cpa1.id_cda_padrao_abastec, cpa1.id_cda, cpa1.id_modelo_veiculo,modelo_veiculos.descricao veiculo_descricao , cdas.descricao cda_descricao,cpa1.qtd_litros_abastec_padrao,cpa1.media_padrao FROM cda_padrao_abastecimentos cpa1 inner join cdas on cdas.id_cda =  cpa1.id_cda inner join modelo_veiculos on cpa1.id_modelo_veiculo  =  modelo_veiculos.id_modelo where cpa1.id_cda_padrao_abastec = {result.one().id_cda_padrao_abastec}''').one()
                 if results != []:
-                    return json.dumps({'criado': pesquisa_banco(id_cdaPesquisa,veiculos,id_cda0,conn),'valor_alterado':results}),201
+                    return jsonify({'status': 'Criado'}),201
                 else:
                    return jsonify({'status': 'ao inserir / retornar obj'}),400  
             except:

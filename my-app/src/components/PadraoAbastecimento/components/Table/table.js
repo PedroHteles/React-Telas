@@ -22,7 +22,6 @@ const Table = ({
   columns,
   selectable,
   onRowSelect,
-  onSelectedRowsChange,
   selectionColumnProps,
   rowClassName
 }) => {
@@ -33,7 +32,6 @@ const Table = ({
       setSelectedRowKeys(selectedRowKeys);
     }
     onRowSelect( rowData );
-    onSelectedRowsChange(selectedRowKeys);
   };
 
 

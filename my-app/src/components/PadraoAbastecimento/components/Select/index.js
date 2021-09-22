@@ -6,41 +6,46 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Cssselect } from "../../components/Table/styles";
 
-
-function Filtros() {
-  const { cdas , veiculos, setIndexveiculos, setIndexcdas,cda0, setIndexcda0 } = React.useContext(IndexContext);
+function Select() {
+  const { select,dadosSelect,setSelect} = React.useContext(IndexContext);
 
   return (
   <div className="corpo" >
-    <Cssselect>
+    <Cssselect className="">
       <FormControl>
         <Autocomplete
         id="combo-cdas"
-        options={cdas}
+        options={dadosSelect.idCdaSelec}
         getOptionLabel={(option) => option.descricao}
         style={{ width: 300 }}
         onChange={(event, newValue) => {
-          setIndexcdas(newValue?.id_cda ? newValue?.id_cda : 0);
+          let idCdaSelec = newValue?.id_cda ? newValue?.id_cda : 0
+          setSelect({...select, idCdaSelec});
         }} renderInput={(params) => <TextField {...params} label="CDAS" variant="outlined" />}/>
       </FormControl>
       <FormControl>
         <Autocomplete
           id="combo-veiculos"
-          options={veiculos}
+          options={dadosSelect.idVeiculoSelec}
           getOptionLabel={(option) => option.descricao}
           style={{ width: 300 }}
           onChange={(event, newValue) => {
-            setIndexveiculos(newValue?.id_modelo ? newValue?.id_modelo : 0);
+            let idVeiculoSelec = newValue?.id_modelo ? newValue?.id_modelo : 0
+            setSelect({...select, idVeiculoSelec});
           }} renderInput={(params) => <TextField {...params} label="Veiculos" variant="outlined" />}/>
         </FormControl>
         <FormControl>
-          <NativeSelect disableUnderline = "true" id="demo-customized-select-native" value={cda0} onChange={(e) => setIndexcda0(parseInt(e.target.value))}>
-            <option value={0}>Registrados</option>
-            <option value={1}>Não registrados</option>
+          <NativeSelect disableUnderline = "true" id="demo-customized-select-native" value={JSON.parse(select.abastecimentoZerado)} onChange={(e) => {
+            let abastecimentoZerado = JSON.parse(e.target.value); 
+            setSelect({...select,abastecimentoZerado});
+            
+            }}>
+            <option value={false} selected>Registrados</option>
+            <option value={true}>Não registrados</option>
           </NativeSelect>
         </FormControl>
     </Cssselect>
   </div>
   );
 }
-export default Filtros;
+export default Select;

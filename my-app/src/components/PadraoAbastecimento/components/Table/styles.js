@@ -167,6 +167,8 @@ export const Empty = styled.div`
 export const Cssselect = styled.div`
 width: 100%
 display: flex;
+margin-bottom: 2%;
+margin-top: 2%;
 flex-direction: row;
 justify-content: space-around;
 
