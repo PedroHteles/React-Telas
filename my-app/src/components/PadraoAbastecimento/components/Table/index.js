@@ -9,14 +9,32 @@ const handleOnClickRow = setSelectedRow => (e) => {
   setSelectedRow(e.rowData)
 };
 
+
 const TabelaMontada = () => {
     const [selectedRow, setSelectedRow] = React.useState(null);
-    // const [dadosselecinados, setDadosselecionados] = React.useState(null);
-    const {dadosTabela,setButtonPopup,buttonPopup,setDadosForm,dadosForm} = React.useContext(IndexContext);
+    const {dadosTabela,setButtonPopup,buttonPopup,setDadosForm,dadosForm,setDadosTabela} = React.useContext(IndexContext);
+    const [sortBy, setSortBy] = React.useState({ key: "qtd_litros_abastec_padrao", order: "asc" });
+    const [content, setContent] = React.useState([]);
+
+
+
+
+    const handleOnColumnSort = (dadosTabela, setContent, setSortBy) => ({
+      key,
+      order
+    }) => {
+      
+      const dataSorted = [...dadosTabela].sort((a, b) =>
+        order === "desc" ? a[key] - b[key] : b[key] - a[key]
+      );
+      setSortBy({ key, order });
+      setDadosTabela([...dataSorted]);
+    };
+
+
 
     const onRowSelect = (row) => {
       setButtonPopup(true);
-      console.log(row)
       let qtdLitros = row.qtd_litros_abastec_padrao
       let mediaAbastecimento = row.media_padrao
       let idCdaAbastecimento =  row.id_cda_padrao_abastec
@@ -33,9 +51,6 @@ const TabelaMontada = () => {
       return hasEqualRow && "active";
     };
 
-    dadosTabela?.forEach(function (o, index) {
-      o.linhas = index
-    });
 
     
     return (
@@ -48,13 +63,13 @@ const TabelaMontada = () => {
         onRowSelect={onRowSelect}
         onClickRow={handleOnClickRow(setSelectedRow)}
         rowClassName={addClassNameRow(selectedRow)}
-        selectable
-        >
-            {columnDefinition.map(({ dataKey, ...restProps }) => {
-            return (
-                <Column key={dataKey} dataKey={dataKey} {...restProps} />
-            )
-        })}
+        sortBy={sortBy}
+        onColumnSort={handleOnColumnSort(dadosTabela, setContent, setSortBy)}
+        selectable>
+        {columnDefinition.map(({ dataKey, ...restProps }) => {
+        return (
+          <Column key={dataKey} dataKey={dataKey} {...restProps} />
+        )})}
       </Table>
       <Popup trigger={buttonPopup} setTriger={setButtonPopup}></Popup>
       </>

@@ -6,6 +6,7 @@ const colunas =
     {
       dataKey: "linhas",
       title: "Linhas",
+      sortable: true,
       width: 150
     },
     {
@@ -20,11 +21,13 @@ const colunas =
     },
     {
       dataKey: "qtd_litros_abastec_padrao",
+      sortable: true,
       title: "Quantidade de litros",
       width: 250
     },
     {
       dataKey: "media_padrao",
+      sortable: true,
       title: "Media Padrao",
       width: 250
     }

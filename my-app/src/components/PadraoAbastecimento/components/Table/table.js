@@ -23,7 +23,8 @@ const Table = ({
   selectable,
   onRowSelect,
   selectionColumnProps,
-  rowClassName
+  rowClassName,
+  sortBy
 }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -66,6 +67,7 @@ const Table = ({
             headerHeight={headerHeight}
             rowHeight={rowHeight}
             rowKey="linhas"
+            sortBy={sortBy}
             onColumnSort={onColumnSort}
             emptyRenderer={<Empty>Sem informações no momento</Empty>}
             columns={_columns}

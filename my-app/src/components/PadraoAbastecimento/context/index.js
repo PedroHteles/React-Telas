@@ -1,10 +1,10 @@
   
 import React, { createContext, useState} from "react";
 import api from "../services/api";
-
 export const IndexContext = createContext();
 
-const EDIT_INITIAL = {
+
+const EDIT_FORM = {
   qtdLitros: null,
   mediaAbastecimento: null,
   idCdaAbastecimento: null,
@@ -24,54 +24,51 @@ const DADOS = {
 };
 
 export default function IndexProvider({ children }) {
-  const [dadosForm, setDadosForm] = useState(EDIT_INITIAL);
+  const [dadosForm, setDadosForm] = useState(EDIT_FORM);
   const [select, setSelect] = useState(SEARCH_INITIAL);
   const [dadosSelect, setDadosSelect] = useState(DADOS);
   const [dadosTabela, setDadosTabela] = useState([]);
   const [status, setStatus] = useState(null);
   const [buttonPopup, setButtonPopup] = useState(null);
 
-
   React.useEffect(async() => {
-    const  res = await api.get('cdas');
-    const  res1 = await api.get('modelos');
-    let idCdaSelec = res.data
-    let idVeiculoSelec =  res1.data
+    const  res = await api.get('select');
+    let idCdaSelec = res.data.cdas
+    let idVeiculoSelec =  res.data.veiculos
     setDadosSelect({...dadosSelect,idVeiculoSelec,idCdaSelec})
   }, []);
+
   React.useEffect(async() =>{
-    let idCdaSelecc = typeof select.idCdaSelec !== 'number' ? 0 : select.idCdaSelec
-    let idVeiculoSelecc =  typeof select.idVeiculoSelec !== 'number' ? 0 : select.idVeiculoSelec
-    const  res = await api.post('pesquisa',{idCdaSelec:idCdaSelecc,idVeiculoSelec:idVeiculoSelecc,abastecimentoZerado:select.abastecimentoZerado})
+    const  res = await api.post('pesquisa',select)
+    res.data?.forEach(function (o, index) {o.linhas = index});
     setDadosTabela(res.data)
   },[select,setSelect])
 
   const enviaForm = async() =>{
-    console.log(dadosForm)
-    try {
-      if(dadosForm.idCdaAbastecimento == null){
-        const res = await api.post('criar',dadosForm);
-        var enviado = 2
-        setStatus(enviado)
+    try{
+      if(dadosForm.idCdaAbastecimento !== null){
+        const  res = await api.patch('editar',{dadosForm,select});
+        res?.data?.dadosForm?.forEach(function (o, index) {o.linhas = index});
+        setDadosTabela(res?.data?.dadosForm)
         setButtonPopup(false)
-        setTimeout(function(){ setStatus(false); }, 3000);
-      }else if (dadosForm.idCdaAbastecimento != null){
-        const res = await api.post('editar',dadosForm);
-        var enviado = 2
-        setStatus(enviado)
-        setButtonPopup(false)
-        setTimeout(function(){ setStatus(false); window.location.reload(false); }, 3000);
+        setStatus(true)
+        setTimeout(function(){ setStatus(null); }, 3000);
       }
-    } 
-    catch (error) {
-      var erro = 1
-      setStatus(erro)
-    } 
+      else if (dadosForm.idCdaAbastecimento == null){
+        const  res = await api.patch('criar',{dadosForm,select});
+        res?.data?.dadosForm?.forEach(function (o, index) {o.linhas = index});
+        setDadosTabela(res?.data?.dadosForm)
+        setButtonPopup(false)
+        setStatus(true)
+        setTimeout(function(){ setStatus(null); }, 3000);
+      }
+      
+    }catch(error){setStatus(false); setTimeout(function(){ setStatus(null); }, 8000);} 
   }
   return (
     <IndexContext.Provider
-      value={{ select,dadosForm,status,buttonPopup,dadosTabela,dadosSelect,
-      setSelect,enviaForm,setStatus,setButtonPopup,setDadosSelect,setDadosForm }}
+      value={{select,dadosForm,status,buttonPopup,dadosTabela,dadosSelect,
+      setSelect,enviaForm,setStatus,setButtonPopup,setDadosSelect,setDadosForm,setDadosTabela}}
     >{children}
     </IndexContext.Provider>
   );

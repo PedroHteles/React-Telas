@@ -6,29 +6,15 @@ from api.admin.pesquisa import pesquisa_banco
 from flask import Flask,request,jsonify 
 import simplejson as json
 from sqlalchemy.sql import select
-# @app.route('/medias', methods=['GET'])
-# def Medias():
-#     s = select(cda_padrao_abastecimentos.c.media_padrao)
-#     conn = engine.connect()
-#     result = conn.execute(s)
-#     data = [tuple(map(str, tup)) for tup in result.all()]
-#     print(data)
-#     return json.dumps(result.all())
 
-@app.route('/cdas', methods=['GET'])
-def Cdas():
-    s = cdas.select()
-    conn = engine.connect()
-    result = conn.execute(s)
-    return json.dumps(result.all()),200
-
-
-@app.route('/modelos', methods=['GET'])
+@app.route('/select', methods=['GET'])
 def modelos():
-    s = modelo_veiculos.select()
+    veiculo = modelo_veiculos.select()
+    cda = cdas.select()
     conn = engine.connect()
-    result = conn.execute(s)
-    return json.dumps(result.all()),200
+    resultVeiculos = conn.execute(veiculo)
+    resultCdas =   conn.execute(cda)
+    return  json.dumps({'veiculos': resultVeiculos.all(),'cdas':resultCdas.all()}),200
 
 @app.route('/pesquisa', methods=['POST'])
 def pesquisa():
@@ -39,15 +25,16 @@ def pesquisa():
     conn = engine.connect()
     return json.dumps(pesquisa_banco(id_cda,veiculos,id_cda0,conn)),200
 
-@app.route('/editar', methods=['POST'])
+@app.route('/editar', methods=['PATCH'])
 def editar():
     request_data = json.loads(request.data)
-    media = request_data['mediaAbastecimento']
-    litros = request_data['qtdLitros']
-    id_cda_padrao = request_data['idCdaAbastecimento']
-    print(request_data)
+    media = request_data['dadosForm']['mediaAbastecimento']
+    litros = request_data['dadosForm']['qtdLitros']
+    id_cda_padrao = request_data['dadosForm']['idCdaAbastecimento']
+    idCdaSelec = request_data['select']['idCdaSelec']
+    idVeiculoSelec = request_data['select']['idVeiculoSelec']
+    abastecimentoZerado = request_data['select']['abastecimentoZerado']
     conn = engine.connect()
-    print(type(media) == float or type(media) == int)
 
     if (type(media) == float or type(media) == int) and type(litros) == int and type(id_cda_padrao) == int:
         s = select(cda_padrao_abastecimentos).where(cda_padrao_abastecimentos.c.id_cda_padrao_abastec == id_cda_padrao)
@@ -56,7 +43,7 @@ def editar():
             try:
                 tmt = cda_padrao_abastecimentos.update().where(cda_padrao_abastecimentos.c.id_cda_padrao_abastec == id_cda_padrao).values(qtd_litros_abastec_padrao=litros,media_padrao=media)
                 conn.execute(tmt)
-                return  jsonify({'status': 'Alterado'}),201
+                return json.dumps({'dadosForm': pesquisa_banco(idCdaSelec,idVeiculoSelec,abastecimentoZerado,conn)}),201
             except:
                 return jsonify({'status': 'erro ao inserir objeto'}),400
         else:
@@ -65,13 +52,17 @@ def editar():
         return jsonify({'status': 'inserir apenas numeros'}),403
 
 
-@app.route('/criar', methods=['POST'])
+@app.route('/criar', methods=['PATCH'])
 def criar():
     request_data = json.loads(request.data)
-    media = request_data['mediaAbastecimento']
-    litros = request_data['qtdLitros']
-    id_cda = request_data['idCda']
-    id_modelo = request_data['idModelo']
+    media = request_data['dadosForm']['mediaAbastecimento']
+    litros = request_data['dadosForm']['qtdLitros']
+    id_cda = request_data['dadosForm']['idCda']
+    id_modelo = request_data['dadosForm']['idModelo']
+    idCdaSelec = request_data['select']['idCdaSelec']
+    idVeiculoSelec = request_data['select']['idVeiculoSelec']
+    abastecimentoZerado = request_data['select']['abastecimentoZerado']
+    
     conn = engine.connect()
 
     if (type(media) == float or type(media) == int) and type(litros) == int:
@@ -85,7 +76,7 @@ def criar():
                 result = conn.execute(s)
                 results = conn.execute(f'''SELECT cpa1.id_cda_padrao_abastec, cpa1.id_cda, cpa1.id_modelo_veiculo,modelo_veiculos.descricao veiculo_descricao , cdas.descricao cda_descricao,cpa1.qtd_litros_abastec_padrao,cpa1.media_padrao FROM cda_padrao_abastecimentos cpa1 inner join cdas on cdas.id_cda =  cpa1.id_cda inner join modelo_veiculos on cpa1.id_modelo_veiculo  =  modelo_veiculos.id_modelo where cpa1.id_cda_padrao_abastec = {result.one().id_cda_padrao_abastec}''').one()
                 if results != []:
-                    return jsonify({'status': 'Criado'}),201
+                    return json.dumps({'dadosForm': pesquisa_banco(idCdaSelec,idVeiculoSelec,abastecimentoZerado,conn)}),201
                 else:
                    return jsonify({'status': 'ao inserir / retornar obj'}),400  
             except:
