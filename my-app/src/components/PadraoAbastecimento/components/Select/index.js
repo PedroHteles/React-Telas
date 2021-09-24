@@ -8,12 +8,18 @@ import { Cssselect } from "../../components/Table/styles";
 import { fabClasses } from "@mui/material";
 
 function Select() {
-  const { select,dadosSelect,setSelect} = React.useContext(IndexContext);
+  const { select,dadosSelect,setSelect,dadosTabela} = React.useContext(IndexContext);
 
-  const options = [
-    { label: 'Não registrados', id: 'true' },
-    { label: 'Registrados', id: 'false' },
-  ];
+
+
+  function filterItems(dadosSelect) {
+    return dadosTabela.filter(function(el) {
+      if(el.media_padrao > 0 && el.qtd_litros_abastec_padrao > 0)
+        return el
+    })
+  }
+  let tsst = filterItems();
+
 
   return (
   <div className="corpo" >{

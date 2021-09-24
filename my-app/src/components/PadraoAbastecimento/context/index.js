@@ -32,17 +32,17 @@ export default function IndexProvider({ children }) {
   const [buttonPopup, setButtonPopup] = useState(null);
 
   React.useEffect(async() => {
-    const  res = await api.get('select');
+    const  res = await api.get('dadosPadraoAbastec');
+    console.log(res)
     let idCdaSelec = res.data.cdas
     let idVeiculoSelec =  res.data.veiculos
+    res.data?.Tabela?.forEach(function (o, index) {o.linhas = index});
     setDadosSelect({...dadosSelect,idVeiculoSelec,idCdaSelec})
+    console.log(res.data.Tabela)
+    setDadosTabela(res.data.Tabela)
   }, []);
 
-  React.useEffect(async() =>{
-    const  res = await api.post('pesquisa',select)
-    res.data?.forEach(function (o, index) {o.linhas = index});
-    setDadosTabela(res.data)
-  },[select,setSelect])
+
 
   const enviaForm = async() =>{
     try{
