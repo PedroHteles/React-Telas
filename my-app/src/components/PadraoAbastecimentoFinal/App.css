@@ -1,0 +1,169 @@
+#root, html, body {
+  background-color:  #FFFFFF;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.example::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-inner-spin-button{
+  display: none;
+}
+
+.logo {
+  border-radius: 4px;
+}
+
+header {
+  margin-left: 0%;
+  text-align: center;
+  background-color:rgb(0, 175, 29)  ;
+  color: white;
+  padding: 0.5% 0.5% 0.5% 0.5%;
+}
+
+.div1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.popu-iner {
+  padding: 1rem;
+  width: 28%;
+  height: fit-content;
+  background-color: white;
+  border-radius: 1rem;
+  margin: auto;
+  margin-top: 14%;
+}
+
+.botoes{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0 0;
+}
+
+
+.litros {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.media {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-center {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.popup-header{
+  width: 100%;
+  display: flex;
+}
+
+.botao {
+  background-color: #c9c9c9;
+  color: black;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.botaoX {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 100px;
+  margin-left: 95%;
+  padding: 1% 1.7%;
+  cursor: pointer;
+}
+
+.botao:hover{
+  transform: scale(1.1, 1.1);
+  transition: 200ms;
+}
+
+.botao:not(:hover){
+  transform: scale(1, 1);
+  transition: 200ms;
+}
+
+.ata {
+  margin: 1%;
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+.alterado {
+  display: flex;
+  position: absolute;
+  top: 10%;
+  right: 0;
+  flex-direction: row;
+  background-color: #0000006e;
+  width: 10%;
+  color: #FFF;
+  animation: slide-left 3s;
+  overflow: hidden;
+}
+
+@keyframes slide-left {
+  from{
+    transform: translate(100%, 0);
+  }
+
+  10%{
+    transform: translate(0, 0);
+  }
+
+  90%{
+    transform: translate(0, 0);
+  }
+
+  to{
+    transform: translate(100%, 0);
+  }
+}
+
+.certo {
+  background-color: #11ce00;
+  width: 5%;
+}
+
+.marginText {
+  margin-left: 7%;
+}
+
+.MuiFilledInput-input {
+  text-align: center;
+}
+
+.erro {
+  background-color: #ce0000;
+  width: 5%;
+}

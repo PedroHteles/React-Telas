@@ -3,7 +3,7 @@ import React from "react";
 import Table from "./table";
 import { IndexContext }  from '../../context/index'
 import columnDefinition from './column-definition'
-import Popup from '../Popup/index'
+import Popup from '../Edit/index'
 
 const handleOnClickRow = setSelectedRow => (e) => {
   setSelectedRow(e.rowData)
@@ -12,35 +12,33 @@ const handleOnClickRow = setSelectedRow => (e) => {
 
 const TabelaMontada = () => {
     const [selectedRow, setSelectedRow] = React.useState(null);
-    const {dadosTabela,setButtonPopup,buttonPopup,setDadosForm,dadosForm,setDadosTabela,search,searchcdas,searchveiculos,select,setSearch} = React.useContext(IndexContext);
+    const {dadosTabela,setDadosForm,search,select,setSearch} = React.useContext(IndexContext);
     const [sortBy, setSortBy] = React.useState({ key: "qtdLitrosAbastecPadrao", order: "asc" });
-    const [content, setContent] = React.useState([]);
-    const [ searchFinal, setSearchFinal] = React.useState([]);
+    const [openPopup, setOpenPopup] = React.useState(false);
 
+    React.useEffect(() => {
+      let newList = select.abastecimentoZerado ? 
+                dadosTabela.filter(el => el.mediaPadrao == 0 && el.qtdLitrosAbastecPadrao == 0)
+          :     dadosTabela.filter(el => el.mediaPadrao > 0 && el.qtdLitrosAbastecPadrao > 0);
+      newList = select.idCdaSelec > 0 ? newList.filter( el => el.idCda == select.idCdaSelec ) : newList;
+      newList = select.idVeiculoSelec > 0 ? newList.filter( el => el.idModeloVeiculo == select.idVeiculoSelec ) : newList;
 
+      setSearch(newList);
+    },[dadosTabela, select]); 
 
-
-  React.useEffect(() =>{
-    let searchTable = search.length > 0 ? search : dadosTabela 
-    let searchCdas = searchcdas ? searchcdas : searchTable
-    setSearchFinal(searchveiculos ? searchveiculos : searchCdas)
-    setContent(searchveiculos ? searchveiculos : searchCdas)
-    
-  },[search,searchcdas,searchveiculos,dadosTabela])
-
-    const handleOnColumnSort = (searchFinal, setContent, setSortBy) => ({
+    const handleOnColumnSort = () => ({
       key,
       order
     }) => {
-      const dataSorted = [...searchFinal].sort((a, b) =>
+      const dataSorted = [...search].sort((a, b) =>
         order === "desc" ? a[key] - b[key] : b[key] - a[key]
       );
       setSortBy({ key, order });
-      setContent([...dataSorted]);
+      setSearch([...dataSorted]);
     };   
 
     const onRowSelect = (row) => {
-      setButtonPopup(true);
+      setOpenPopup(true);
       setDadosForm(row)
     };
 
@@ -50,12 +48,11 @@ const TabelaMontada = () => {
       return hasEqualRow && "active";
     };
 
-    const alterData = content.length !== 0 ? content : searchFinal;
 
     return (
       <>
         <Table
-        data={alterData}
+        data={search}
         rowKey="linhas"
         headerHeight={30}
         rowHeight={30}
@@ -63,14 +60,14 @@ const TabelaMontada = () => {
         onClickRow={handleOnClickRow(setSelectedRow)}
         rowClassName={addClassNameRow(selectedRow)}
         sortBy={sortBy}
-        onColumnSort={handleOnColumnSort(searchFinal, setContent, setSortBy)}
+        onColumnSort={handleOnColumnSort}
         selectable>
         {columnDefinition.map(({ dataKey, ...restProps }) => {
         return (
           <Column key={dataKey} dataKey={dataKey} {...restProps} />
         )})}
       </Table>
-      <Popup trigger={buttonPopup} setTriger={setButtonPopup}></Popup>
+      <Popup trigger={openPopup} setTriger={setOpenPopup}></Popup>
       </>
 
 )
