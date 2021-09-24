@@ -12,53 +12,53 @@ const handleOnClickRow = setSelectedRow => (e) => {
 
 const TabelaMontada = () => {
     const [selectedRow, setSelectedRow] = React.useState(null);
-    const {dadosTabela,setButtonPopup,buttonPopup,setDadosForm,dadosForm,setDadosTabela} = React.useContext(IndexContext);
-    const [sortBy, setSortBy] = React.useState({ key: "qtd_litros_abastec_padrao", order: "asc" });
+    const {dadosTabela,setButtonPopup,buttonPopup,setDadosForm,dadosForm,setDadosTabela,search,searchcdas,searchveiculos,select,setSearch} = React.useContext(IndexContext);
+    const [sortBy, setSortBy] = React.useState({ key: "qtdLitrosAbastecPadrao", order: "asc" });
     const [content, setContent] = React.useState([]);
+    const [ asdasas , setADASOMDASO] = React.useState([]);
+    const [ aopa, setAopa] = React.useState([]);
+    const [ searchFinal, setSearchFinal] = React.useState([]);
 
 
 
 
-    const handleOnColumnSort = (dadosTabela, setContent, setSortBy) => ({
+  React.useEffect(() =>{
+    let searchTable = search.length > 0 ? search : dadosTabela 
+    let searchCdas = searchcdas ? searchcdas : searchTable
+    setSearchFinal(searchveiculos ? searchveiculos : searchCdas)
+    setContent(searchveiculos ? searchveiculos : searchCdas)
+    
+  },[search,searchcdas,searchveiculos,dadosTabela])
+
+    const handleOnColumnSort = (searchFinal, setContent, setSortBy) => ({
       key,
       order
     }) => {
-      
-      const dataSorted = [...dadosTabela].sort((a, b) =>
+      const dataSorted = [...searchFinal].sort((a, b) =>
         order === "desc" ? a[key] - b[key] : b[key] - a[key]
       );
       setSortBy({ key, order });
-      setDadosTabela([...dataSorted]);
-    };
-
-
+      setContent([...dataSorted]);
+    };   
 
     const onRowSelect = (row) => {
       setButtonPopup(true);
-      let qtdLitros = row.qtd_litros_abastec_padrao
-      let mediaAbastecimento = row.media_padrao
-      let idCdaAbastecimento =  row.id_cda_padrao_abastec
-      let idCda =  row.id_cda
-      let idModelo =  row.id_modelo_veiculo
-      let veiculoDescricao = row.veiculo_descricao
-      let cdaDescricao = row.cda_descricao
-      setDadosForm({...dadosForm,qtdLitros,mediaAbastecimento,idCdaAbastecimento,idCda,idModelo,veiculoDescricao,cdaDescricao})
+      console.log(row)
+      setDadosForm(row)
     };
 
     const addClassNameRow = selectedRow => (e) => {
-      const { id_modelo_veiculo, id_cda } = e.rowData;
-      const hasEqualRow = selectedRow?.id_modelo_veiculo === id_modelo_veiculo && selectedRow.id_cda === id_cda;
+      const { idModeloVeiculo, idCda } = e.rowData;
+      const hasEqualRow = selectedRow?.idModeloVeiculo === idModeloVeiculo && selectedRow.idCda === idCda;
       return hasEqualRow && "active";
     };
 
+    const alterData = content.length !== 0 ? content : searchFinal;
 
-
-
-    
     return (
       <>
         <Table
-        data={dadosTabela}
+        data={alterData}
         rowKey="linhas"
         headerHeight={30}
         rowHeight={30}
@@ -66,7 +66,7 @@ const TabelaMontada = () => {
         onClickRow={handleOnClickRow(setSelectedRow)}
         rowClassName={addClassNameRow(selectedRow)}
         sortBy={sortBy}
-        onColumnSort={handleOnColumnSort(dadosTabela, setContent, setSortBy)}
+        onColumnSort={handleOnColumnSort(searchFinal, setContent, setSortBy)}
         selectable>
         {columnDefinition.map(({ dataKey, ...restProps }) => {
         return (

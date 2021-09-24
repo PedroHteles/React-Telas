@@ -9,22 +9,17 @@ from sqlalchemy.sql import select
 
 @app.route('/dadosPadraoAbastec', methods=['GET'])
 def modelos():
-    veiculo = modelo_veiculos.select()
-    cda = cdas.select()
     conn = engine.connect()
-    resultVeiculos = conn.execute(veiculo)
-    resultCdas =   conn.execute(cda)
-    results = conn.execute(f'''SELECT cpa1.id_cda_padrao_abastec, cpa1.id_cda, cpa1.id_modelo_veiculo,modelo_veiculos.descricao veiculo_descricao , cdas.descricao cda_descricao,cpa1.qtd_litros_abastec_padrao,cpa1.media_padrao FROM cda_padrao_abastecimentos cpa1 inner join cdas on cdas.id_cda =  cpa1.id_cda inner join modelo_veiculos on cpa1.id_modelo_veiculo  =  modelo_veiculos.id_modelo union all select null, cda.id_cda, mv.id_modelo, mv.descricao, cda.descricao,0,0 FROM cdas cda, modelo_veiculos mv where not exists (select null from cda_padrao_abastecimentos cpa where cpa.id_cda = cda.id_cda and cpa.id_modelo_veiculo = mv.id_modelo);''')
-    return  json.dumps({'veiculos': resultVeiculos.all(),'cdas':resultCdas.all(),'Tabela':results.all()}),200
+    results = conn.execute(f'''SELECT cpa1.id_cda_padrao_abastec id, cpa1.id_cda idCda, cpa1.id_modelo_veiculo idModeloVeiculo ,modelo_veiculos.descricao nomeModeloVeiculo , cdas.descricao nomeCda,cpa1.qtd_litros_abastec_padrao qtdLitrosAbastecPadrao,cpa1.media_padrao mediaPadrao
+FROM cda_padrao_abastecimentos cpa1 
+inner join cdas on cdas.id_cda =  cpa1.id_cda 
+inner join modelo_veiculos on cpa1.id_modelo_veiculo  =  modelo_veiculos.id_modelo 
+union all select null, cda.id_cda, mv.id_modelo, mv.descricao, cda.descricao,0,0 
+FROM cdas cda, modelo_veiculos mv 
+where not exists (select null from cda_padrao_abastecimentos cpa where cpa.id_cda = cda.id_cda and cpa.id_modelo_veiculo = mv.id_modelo);''')
+    return  json.dumps({'Tabela':results.all()}),200
 
-# @app.route('/pesquisa', methods=['POST'])
-# def pesquisa():
-#     request_data = json.loads(request.data)
-#     id_cda = request_data['idCdaSelec']
-#     veiculos = request_data['idVeiculoSelec']
-#     id_cda0 = request_data['abastecimentoZerado']
-#     conn = engine.connect()
-#     return json.dumps(pesquisa_banco(id_cda,veiculos,id_cda0,conn)),200
+
 
 # @app.route('/editar', methods=['PATCH'])
 # def editar():

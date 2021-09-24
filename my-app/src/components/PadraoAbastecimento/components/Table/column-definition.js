@@ -10,23 +10,23 @@ const colunas =
       width: 150
     },
     {
-      dataKey: "cda_descricao",
+      dataKey: "nomeCda",
       title: "CDA",
       width: 350
     },
     {
-      dataKey: "veiculo_descricao",
+      dataKey: "nomeModeloVeiculo",
       title: "Veiculo",
       width: 450
     },
     {
-      dataKey: "qtd_litros_abastec_padrao",
+      dataKey: "qtdLitrosAbastecPadrao",
       sortable: true,
       title: "Quantidade de litros",
       width: 250
     },
     {
-      dataKey: "media_padrao",
+      dataKey: "mediaPadrao",
       sortable: true,
       title: "Media Padrao",
       width: 250

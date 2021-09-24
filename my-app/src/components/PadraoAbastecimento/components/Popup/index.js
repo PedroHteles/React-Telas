@@ -17,32 +17,32 @@ function Popup(props) {
         <div className="popup-header">
           <button className="botaoX" onClick={() => {props.setTriger(false);setStatus(null);}}>X</button>
         </div>
-        <h1 className="text-center">{dadosForm.cdaDescricao}</h1>
-        <h1 className="text-center">{dadosForm.veiculoDescricao}</h1>
+        <h1 className="text-center">{dadosForm.nomeCda}</h1>
+        <h1 className="text-center">{dadosForm.nomeModeloVeiculo}</h1>
         <form className="form-center" onSubmit={enviaFormularioEditar}>
           <div className="inputs">
             <div className="litros">
               <h3 className="text-center">Qtd. de Litros</h3>
               <FilledInput
                 type="number"
-                value={dadosForm.qtdLitros ? dadosForm.qtdLitros : ""}
+                value={dadosForm.qtdLitrosAbastecPadrao ? dadosForm.qtdLitrosAbastecPadrao : ""}
                 inputProps={{min:0,max:9999}}
                 onChange={(e) => {
                   if (!isNaN(e.target.value)) {
-                    var qtdLitros = parseInt(e.target.value);
-                    setDadosForm({...dadosForm,qtdLitros});
+                    var qtdLitrosAbastecPadrao = parseInt(e.target.value);
+                    setDadosForm({...dadosForm,qtdLitrosAbastecPadrao});
                   }}}/>
             </div>
             <div className="media">
               <h3 className="text-center">Média Padrão</h3>
               <FilledInput
                 type="number"
-                value={dadosForm.mediaAbastecimento ? dadosForm.mediaAbastecimento : ""}
+                value={dadosForm.mediaPadrao ? dadosForm.mediaPadrao : ""}
                 inputProps={{min:0.0,max:99.99,step:0.01}}
                 onChange={(e) => {
                   if (!isNaN(e.target.value)) {
-                    var mediaAbastecimento = parseFloat(e.target.value);
-                    setDadosForm({...dadosForm, mediaAbastecimento});
+                    var mediaPadrao = parseFloat(e.target.value);
+                    setDadosForm({...dadosForm, mediaPadrao});
                   }}}/>
             </div>
           </div>

@@ -5,21 +5,60 @@ import { IndexContext } from '../../context/index'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Cssselect } from "../../components/Table/styles";
-import { fabClasses } from "@mui/material";
+
+
 
 function Select() {
-  const { select,dadosSelect,setSelect,dadosTabela} = React.useContext(IndexContext);
+  const { dadosSelect,dadosTabela,setSearch,setSearchCdas,setSearchVeiculos,select,setSelect} = React.useContext(IndexContext);
 
 
 
-  function filterItems(dadosSelect) {
-    return dadosTabela.filter(function(el) {
-      if(el.media_padrao > 0 && el.qtd_litros_abastec_padrao > 0)
-        return el
-    })
-  }
-  let tsst = filterItems();
+  React.useEffect(() => {
+    let newList = []
+    let dadosPesquisaSelect = []
 
+    if(select.abastecimentoZerado == false){
+      newList = dadosTabela.filter(function(el) {
+        if(el.mediaPadrao > 0 && el.qtdLitrosAbastecPadrao > 0){
+          return el
+        }})
+      setSearch(newList)
+    }
+    else if (select.abastecimentoZerado == true){
+      newList =  dadosTabela.filter(function(el) {
+        if(el.mediaPadrao == 0 && el.qtdLitrosAbastecPadrao == 0){
+          return el
+        }})
+      setSearch(newList)
+    }
+    if(select.idCdaSelec !== 0){
+      dadosPesquisaSelect = newList.filter(function(el) {
+        if(el.idCda == select.idCdaSelec){
+          return el
+        }})
+        setSearchCdas(dadosPesquisaSelect)
+    }else{
+      setSearchCdas(null)
+    }
+    if(select.idVeiculoSelec !== 0){
+      if(select.idCdaSelec !== 0){
+        dadosPesquisaSelect = newList.filter(function(el) {
+          if(el.idModeloVeiculo == select.idVeiculoSelec && el.idCda == select.idCdaSelec){
+            return el
+          }})
+          setSearchVeiculos(dadosPesquisaSelect)
+      }
+      else if(select.idCdaSelec == 0){
+        dadosPesquisaSelect = newList.filter(function(el) {
+          if(el.idModeloVeiculo == select.idVeiculoSelec){
+            return el
+          }})
+          setSearchVeiculos(dadosPesquisaSelect)
+      }
+    }else{
+      setSearchVeiculos(null)
+    }
+  },[dadosTabela,select,setSelect]); 
 
   return (
   <div className="corpo" >{
@@ -30,10 +69,10 @@ function Select() {
         <Autocomplete
         id="combo-cdas"
         options={dadosSelect?.idCdaSelec}
-        getOptionLabel={(option) => option.descricao}
+        getOptionLabel={(option) => option.nomeCda}
         style={{ width: 300 }}
         onChange={(event, newValue) => {
-          let idCdaSelec = newValue?.id_cda ? newValue?.id_cda : 0
+          let idCdaSelec = newValue?.idCda ? newValue?.idCda : 0
           setSelect({...select, idCdaSelec});
         }} renderInput={(params) => <TextField {...params} label="CDAS" variant="outlined" />}/>
       </FormControl>
@@ -41,16 +80,16 @@ function Select() {
         <Autocomplete
           id="combo-veiculos"
           options={dadosSelect?.idVeiculoSelec}
-          getOptionLabel={(option) => option.descricao}
+          getOptionLabel={(option) => option.nomeModeloVeiculo}
           style={{ width: 300 }}
           onChange={(event, newValue) => {
-            let idVeiculoSelec = newValue?.id_modelo ? newValue?.id_modelo : 0
+            let idVeiculoSelec = newValue?.idModeloVeiculo ? newValue?.idModeloVeiculo : 0
             setSelect({...select, idVeiculoSelec});
           }} renderInput={(params) => <TextField {...params} label="Veiculos" variant="outlined" />}/>
         </FormControl>
         <FormControl>
           <NativeSelect  id="demo-customized-select-native" onChange={(e) => {
-            let abastecimentoZerado = JSON.parse(e.target.value); 
+            let abastecimentoZerado = JSON.parse(e.target.value);
             setSelect({...select,abastecimentoZerado});
           }}>
               <option value={false}>Registrados</option>
